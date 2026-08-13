@@ -42,7 +42,9 @@ dsh plugin --profile web add dsh-plugin-pixluna
       userId: ''
 ```
 
-注意 DSH patch 对 `config` 是整项替换而非深度合并。插件声明 `inject = ['tools']`，Cordis 会在 `@deepseek-ai/dsh-tools` 服务可用后激活它。修改 profile 后重启对应 DSH 进程；本包没有 Web client bundle，不需要重建 DSH Web shell。
+注意 DSH patch 对 `config` 是整项替换而非深度合并。插件声明 `inject = ['tools']`，Cordis 会在 `@deepseek-ai/dsh-tools` 服务可用后激活它。
+
+插件同时将 `Config` 注册为 `pixluna` 用户设置命名空间，并向 DSH 自带的“设置 → 插件 → 插件配置”注册配置卡片。全部配置均可在卡片中设置；常规字段写入 DSH settings，Pixiv Cookie 和各图源 `keyPairs` 则参照模型 API Key 的做法写入 DSH credentials，只向浏览器返回“已配置/未配置”状态。修改会实时作用于后续工具调用。
 
 ## 主要配置
 

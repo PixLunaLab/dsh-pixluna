@@ -13,7 +13,12 @@ const input = './src/index.ts'
 export default defineConfig([
   {
     input,
-    output: [{ file: 'lib/index.mjs', format: 'es', minify: true }],
+    output: [{ file: 'lib/index.js', format: 'es', minify: true }],
+    external
+  },
+  {
+    input: './src/client.ts',
+    output: [{ file: 'lib/client.js', format: 'es', minify: true }],
     external
   },
   {

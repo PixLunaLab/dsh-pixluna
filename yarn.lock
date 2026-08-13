@@ -80,6 +80,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@deepseek-ai/dsh-credentials@npm:^0.1.0-rc.6":
+  version: 0.1.0-rc.6
+  resolution: "@deepseek-ai/dsh-credentials@npm:0.1.0-rc.6"
+  peerDependencies:
+    "@deepseek-ai/cordis": ^4.0.1
+    "@deepseek-ai/dsh-brand": ^0.1.0-rc.6
+    "@deepseek-ai/dsh-invariants": ^0.1.0-rc.6
+  checksum: 10c0/312335d40cf5601bb9a092408ab08f1c384985a9f558f93104e8706a30fa8895cf63e969d74fa03438aab25118c629668231b9a5a3ccc1b151ae5d0a8be77b1a
+  languageName: node
+  linkType: hard
+
+"@deepseek-ai/dsh-settings@npm:^0.1.0-rc.6":
+  version: 0.1.0-rc.6
+  resolution: "@deepseek-ai/dsh-settings@npm:0.1.0-rc.6"
+  peerDependencies:
+    "@deepseek-ai/cordis": ^4.0.1
+    "@deepseek-ai/dsh-brand": ^0.1.0-rc.6
+    "@deepseek-ai/dsh-invariants": ^0.1.0-rc.6
+    "@deepseek-ai/schemastery": ^3.18.1
+  checksum: 10c0/83ecc5c944c685a2661008e086f55d7e097aa1427a3bafca86b8a6534b1bb5d40dfdd91da769c7e0ed8cfe6fdbab1d12d9b3a6b9f3431c78ab827826864ceb80
+  languageName: node
+  linkType: hard
+
 "@deepseek-ai/dsh-tools@npm:^0.1.0-rc.6":
   version: 0.1.0-rc.6
   resolution: "@deepseek-ai/dsh-tools@npm:0.1.0-rc.6"
@@ -617,6 +640,8 @@ __metadata:
   resolution: "dsh-plugin-pixluna@workspace:."
   dependencies:
     "@deepseek-ai/cordis": "npm:^4.0.1"
+    "@deepseek-ai/dsh-credentials": "npm:^0.1.0-rc.6"
+    "@deepseek-ai/dsh-settings": "npm:^0.1.0-rc.6"
     "@deepseek-ai/dsh-tools": "npm:^0.1.0-rc.6"
     "@deepseek-ai/schemastery": "npm:^3.18.1"
     "@types/node": "npm:^25.0.2"
@@ -629,6 +654,8 @@ __metadata:
     undici: "npm:^7.18.2"
   peerDependencies:
     "@deepseek-ai/cordis": ^4.0.1
+    "@deepseek-ai/dsh-credentials": ^0.1.0-rc.6
+    "@deepseek-ai/dsh-settings": ^0.1.0-rc.6
     "@deepseek-ai/dsh-tools": ^0.1.0-rc.6
   languageName: unknown
   linkType: soft

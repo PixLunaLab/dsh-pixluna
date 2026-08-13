@@ -1,6 +1,8 @@
 import type { Context } from '@deepseek-ai/cordis'
 import { defineTool } from '@deepseek-ai/dsh-tools'
+import { installSettingsSection, settingsNamespace } from '@deepseek-ai/dsh-settings'
 import { Config, defaultConfig } from './config'
+import { resolveCredentialConfig } from './credentials'
 import { renderImages } from './format'
 import { requestJson } from './http'
 import { fetchFromProvider, resolveSources } from './providers/fetch'
@@ -9,6 +11,7 @@ import type { ImageResult, PixLunaConfig, ProviderName } from './types'
 
 export const name = 'pixluna'
 export const inject = ['tools']
+export const PIXLUNA_SETTINGS_NAMESPACE = settingsNamespace('pixluna')
 export { Config }
 export type { ImageResult, PixLunaConfig, ProviderInfo, ProviderName } from './types'
 
@@ -103,6 +106,14 @@ async function getImages(
 }
 
 export function apply(ctx: Context, config: PixLunaConfig = defaultConfig) {
+  let current = () => config
+  installSettingsSection(ctx, PIXLUNA_SETTINGS_NAMESPACE, Config, config, {
+    setSource(source) {
+      current = source
+    },
+    onChange() {}
+  })
+
   ctx.tools.register(
     defineTool({
       name: 'pixluna_get',
@@ -137,11 +148,12 @@ export function apply(ctx: Context, config: PixLunaConfig = defaultConfig) {
           }
         },
         render: (_args, value) => [
-          { type: 'text', text: renderImages(value.images, config.showTags) }
+          { type: 'text', text: renderImages(value.images, current().showTags) }
         ]
       },
       timeoutMs: 30_000,
-      execute: (args, exec) => getImages(config, args, exec.signal),
+      execute: async (args, exec) =>
+        getImages(await resolveCredentialConfig(ctx, current()), args, exec.signal),
       presentCall: (args) => ({
         card: 'generic',
         title: 'Get PixLuna images',
@@ -170,11 +182,12 @@ export function apply(ctx: Context, config: PixLunaConfig = defaultConfig) {
           }
         },
         render: (_args, value) => [
-          { type: 'text', text: renderImages(value.images, config.showTags) }
+          { type: 'text', text: renderImages(value.images, current().showTags) }
         ]
       },
       timeoutMs: 30_000,
       async execute(args, exec) {
+        const config = await resolveCredentialConfig(ctx, current())
         const page = args.pages ?? 0
         if (!Number.isInteger(page) || page < 0) throw new Error('pages 必须是大于等于 0 的整数')
         const headers = {
@@ -261,7 +274,7 @@ export function apply(ctx: Context, config: PixLunaConfig = defaultConfig) {
         ]
       },
       async execute() {
-        return { providers: listProviders(config) }
+        return { providers: listProviders(await resolveCredentialConfig(ctx, current())) }
       },
       isConcurrencySafe: () => true,
       presentCall: () => ({ card: 'generic', title: 'List PixLuna sources', kind: 'search' })

@@ -3,14 +3,15 @@
   "description": "PixLuna image source tools for DeepSeek Harness",
   "version": "0.1.0",
   "type": "module",
-  "main": "lib/index.mjs",
-  "module": "lib/index.mjs",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
-      "import": "./lib/index.mjs"
+      "import": "./lib/index.js"
     },
+    "./client": "./lib/client.js",
     "./package.json": "./package.json",
     "./cordis.patch.yml": "./cordis.patch.yml"
   },
@@ -21,7 +22,7 @@
     "cordis.patch.yml"
   ],
   "scripts": {
-    "build": "rolldown -c rolldown.config.js",
+    "build": "node -e \"require('node:fs').rmSync('lib',{recursive:true,force:true})\" && rolldown -c rolldown.config.js",
     "lint": "oxlint",
     "lint-fix": "oxlint --fix && oxfmt",
     "format": "oxfmt --write .",
@@ -31,6 +32,16 @@
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-settings-plugins"
+      ],
+      "platform": "web"
     }
   },
   "homepage": "https://github.com/PixLunaLab/pixluna",
@@ -47,6 +58,8 @@
   ],
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-credentials": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-settings": "^0.1.0-rc.6",
     "@deepseek-ai/dsh-tools": "^0.1.0-rc.6"
   },
   "dependencies": {
@@ -55,6 +68,8 @@
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-credentials": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-settings": "^0.1.0-rc.6",
     "@deepseek-ai/dsh-tools": "^0.1.0-rc.6",
     "@types/node": "^25.0.2",
     "oxfmt": "^0.62.0",
