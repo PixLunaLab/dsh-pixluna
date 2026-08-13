@@ -1,5 +1,7 @@
 # dsh-plugin-pixluna
 
+让 DSH 自己看涩图！
+
 将 [PixLuna](https://github.com/PixLunaLab/pixluna) 的图片获取能力移植为 DeepSeek Harness（DSH）Cordis 插件。插件不再注册聊天命令，而是注册模型可调用的工具；原命令选项均转换为具名工具参数。
 
 ## 工具映射
@@ -10,27 +12,20 @@
 | `pixluna.get.pixiv <pid>` | `pixluna_get_pixiv` | `pid`, `pages`, `all`            |
 | `pixluna.source`          | `pixluna_sources`   | 无                               |
 
-工具返回规范 JSON；Native 模式下会渲染为含图片 URL、作者、标签和原图链接的 Markdown。URL 而不是二进制附件用于结果输出，因此结果可持久化、可用于 Code Mode，并且不依赖 Koishi 的消息/session API。
-
 ## 开发
-
-本目录是独立工作区，构建工具链沿用原 PixLuna 的 Yarn + Rolldown + `rolldown-plugin-dts`：
 
 ```powershell
 yarn install
 yarn lint
-yarn typecheck
 yarn build
 ```
-
-linter 和 formatter 参考 `re-nyaprofiler`，使用 type-aware Oxlint 与 Oxfmt。
 
 ## 安装到 DSH profile
 
 开发目录可直接作为带 `dsh.bundle` 清单的本地 profile layer 安装（`web` 可替换为目标 profile）：
 
 ```powershell
-dsh plugin --profile web add "E:\Projects\pixluna\dsh-plugin-pixluna"
+dsh plugin --profile web add dsh-plugin-pixluna
 ```
 
 `dsh plugin` 会把本包加入 profile 的 `dsh.profile.bundles`，并自动应用包内 `cordis.patch.yml`。默认配置使用 `lolicon` 且关闭 R18；如需覆盖配置，可在该 profile 的用户 `cordis.patch.yml` 中按稳定 row id `pixluna` 覆盖整份配置：
