@@ -1,7 +1,7 @@
 {
   "name": "dsh-plugin-pixluna",
   "description": "PixLuna image source tools for DeepSeek Harness",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "lib/index.js",
   "module": "lib/index.js",
