@@ -4,3 +4,5 @@ node_modules
 .pnp.*
 yarn-error.log
 tsconfig.tsbuildinfo
+.claude
+.omc
