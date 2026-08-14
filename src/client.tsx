@@ -334,7 +334,7 @@ interface ClientModuleWindow extends Window {
       )
       return (
         <li style={{ listStyle: 'none', border: '1px solid var(--dsw-alias-border-l2)', borderRadius: 12, background: open ? 'var(--dsw-alias-bg-layer-2)' : 'var(--dsw-alias-bg-layer-3)' }}>
-          <button type="button" aria-expanded={open} aria-label={t(open ? 'collapse' : 'expand') + ': ' + t('title')} onClick={() => setOpen(!open)} style={{ width: '100%', appearance: 'none', border: 0, background: 'none', font: 'inherit', color: 'inherit', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 12 }}><span style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}><span style={{ fontSize: 15, fontWeight: 600 }}>{t('title')}</span><span style={{ fontSize: 13, color: 'var(--dsw-alias-label-tertiary)' }}>{t('description')}</span></span>{dirty ? <span aria-label={t('save')}>●</span> : null}<span style={{ transform: open ? 'rotate(180deg)' : 'none' }}><IconChevronDownOutline14 /></span></button>
+          <button type="button" aria-expanded={open} aria-label={t(open ? 'collapse' : 'expand') + ': ' + t('title')} onClick={() => setOpen(!open)} style={{ width: '100%', appearance: 'none', border: 0, background: 'none', font: 'inherit', color: 'inherit', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 12 }}><span style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}><span style={{ fontSize: 15, fontWeight: 600 }}>{t('title')}</span><span style={{ fontSize: 13, color: 'var(--dsw-alias-label-tertiary)' }}>{t('description')}</span></span>{dirty ? <span aria-label={t('save')}>●</span> : null}<IconChevronDownOutline14 className={`pixluna-settings-chevron${open ? ' pixluna-settings-chevron-open' : ''}`} /></button>
           {open ? <div style={{ borderTop: '1px solid var(--dsw-alias-border-l2)', margin: '0 16px', paddingBottom: 8 }}>
             {snapshot.status === 'loading' ? <p>{t('loading')}</p> : null}
             {snapshot.status === 'unavailable' ? <div><p>{t('unavailable')}</p><Button variant="outline" onClick={scope.load}>{t('retry')}</Button></div> : null}
@@ -349,6 +349,12 @@ interface ClientModuleWindow extends Window {
     const inject = ['slots', 'locale', 'connection']
     function apply(ctx: any) {
       ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'pixluna: settings locale')
+      ctx.effect(() => {
+        const style = document.createElement('style')
+        style.textContent = '.pixluna-settings-chevron{flex:none;color:var(--dsw-alias-label-tertiary);transition:transform .16s}.pixluna-settings-chevron-open{transform:rotate(180deg)}'
+        document.head.append(style)
+        return () => style.remove()
+      }, 'pixluna: settings styles')
       const t = ctx.locale.bind(NS)
       const { api } = ctx.get('connection')
       const scope = ConfigController()
