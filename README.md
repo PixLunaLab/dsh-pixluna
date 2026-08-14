@@ -1,4 +1,4 @@
-# dsh-plugin-pixluna
+# dsh-pixluna
 
 让 DSH 自己看涩图！
 
@@ -25,14 +25,14 @@ yarn build
 开发目录可直接作为带 `dsh.bundle` 清单的本地 profile layer 安装（`web` 可替换为目标 profile）：
 
 ```powershell
-dsh plugin --profile web add dsh-plugin-pixluna
+dsh plugin --profile web add dsh-pixluna
 ```
 
 `dsh plugin` 会把本包加入 profile 的 `dsh.profile.bundles`，并自动应用包内 `cordis.patch.yml`。默认配置使用 `lolicon` 且关闭 R18；如需覆盖配置，可在该 profile 的用户 `cordis.patch.yml` 中按稳定 row id `pixluna` 覆盖整份配置：
 
 ```yaml
 - id: pixluna
-  name: dsh-plugin-pixluna
+  name: dsh-pixluna
   config:
     defaultSourceProvider:
       - lolicon

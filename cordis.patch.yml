@@ -2,4 +2,4 @@
 # rather than row order, activates it after @deepseek-ai/dsh-tools.
 - insert:
     - id: pixluna
-      name: dsh-plugin-pixluna
+      name: dsh-pixluna

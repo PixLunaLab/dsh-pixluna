@@ -16,7 +16,7 @@ interface ClientModuleWindow extends Window {
 }
 
 ;(window as unknown as ClientModuleWindow).__ModuleLoader__.load({
-  id: 'dsh-plugin-pixluna',
+  id: 'dsh-pixluna',
   factory: (require: ClientRequire) => {
     const React = require('react')
     const { jsx, jsxs } = require('react/jsx-runtime')
