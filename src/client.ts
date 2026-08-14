@@ -22,7 +22,7 @@ interface ClientModuleWindow extends Window {
     const { jsx, jsxs } = require('react/jsx-runtime')
 
     const NS = 'pixluna.settings'
-    const SETTINGS_NS = 'pixluna'
+    const CONFIG_ENDPOINT = 'pixlunaConfig'
 
     const zh = {
       title: 'PixLuna',
@@ -217,6 +217,68 @@ interface ClientModuleWindow extends Window {
         return typeof parsed === 'number' && parsed >= 1 && parsed <= 10
       if (path === 'apiDelay') return typeof parsed === 'number' && parsed >= 0 && parsed <= 10000
       return true
+    }
+
+    function ConfigController(rpc: any) {
+      let snapshot: any = {
+        status: 'loading',
+        value: undefined,
+        base: undefined,
+        user: undefined,
+        writable: false
+      }
+      const listeners = new Set<() => void>()
+      const publish = (next: any) => {
+        snapshot = next
+        for (const listener of [...listeners]) listener()
+      }
+      const load = async () => {
+        try {
+          const result = await rpc.call('/api', `${CONFIG_ENDPOINT}/get`, { args: {} })
+          if (!result.ok) throw new Error(result.error.message)
+          const value = (result.value as any).config
+          publish({
+            status: 'ready',
+            value,
+            base: value,
+            user: value,
+            writable: (result.value as any).writable === true
+          })
+        } catch {
+          publish({ ...snapshot, status: 'unavailable', writable: false })
+        }
+      }
+      const setPath = (target: UnknownRecord, path: string, value: unknown) => {
+        const keys = path.split('.')
+        let out = target
+        for (const key of keys.slice(0, -1)) out = (out[key] ??= {}) as UnknownRecord
+        out[keys[keys.length - 1]] = value
+      }
+      const write = async (path: string, value: unknown) => {
+        const patch: UnknownRecord = {}
+        setPath(patch, path, value)
+        const result = await rpc.call('/api', `${CONFIG_ENDPOINT}/set`, { args: { patch } })
+        if (!result.ok) throw new Error(result.error.message)
+        const config = (result.value as any).config
+        publish({
+          status: 'ready',
+          value: config,
+          base: config,
+          user: config,
+          writable: (result.value as any).writable === true
+        })
+      }
+      void load()
+      return {
+        getSnapshot: () => snapshot,
+        subscribe(listener: () => void) {
+          listeners.add(listener)
+          return () => listeners.delete(listener)
+        },
+        set: write,
+        unset: (path: string) => write(path, get(snapshot.base, path)),
+        load
+      }
     }
 
     function Card({ t, scope, api }: { t: (key: string) => string; scope: any; api: any }) {
@@ -645,17 +707,22 @@ interface ClientModuleWindow extends Window {
       })
     }
 
-    const inject = ['slots', 'locale', 'settingsScope', 'connection']
+    const inject = ['slots', 'locale', 'connection']
     function apply(ctx: any) {
       ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'pixluna: settings locale')
       const t = ctx.locale.bind(NS)
-      const scope = ctx.settingsScope.bind({ namespace: SETTINGS_NS })
-      const { api } = ctx.get('connection')
-      ctx.slots.inject('settings.plugin.item', () =>
-        ctx.slots.register({ name: 'settings.plugin.item', id: 'pixluna', order: 30 }, () =>
-          jsx(Card, { t, scope, api })
-        )
+      const { api, rpc } = ctx.get('connection')
+      const scope = ConfigController(rpc)
+      ctx.effect(
+        () => ctx.on('connection/reset', () => void scope.load()),
+        'pixluna: refresh settings after reconnect'
       )
+      ctx.slots.inject('settings.plugin.item', function* () {
+        yield ctx.slots.register(
+          { name: 'settings.plugin.item', id: 'pixluna', order: 30, locale: NS },
+          () => jsx(Card, { t, scope, api })
+        )
+      })
     }
     return { inject, apply }
   }

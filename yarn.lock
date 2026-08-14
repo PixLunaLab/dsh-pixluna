@@ -122,6 +122,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@deepseek-ai/dsh-typert-protocol@npm:^0.1.0-rc.6":
+  version: 0.1.0-rc.6
+  resolution: "@deepseek-ai/dsh-typert-protocol@npm:0.1.0-rc.6"
+  peerDependencies:
+    "@deepseek-ai/cordis": ^4.0.1
+    "@deepseek-ai/dsh-invariants": ^0.1.0-rc.6
+  checksum: 10c0/b2dd55023a08b772e8ba7173e7f9d138944854073d37c68af8af26babc6f06a1c60a27a53e7eaa05bd3e47f0d582c95b92dc2b15b690bdab2bcb23567d91c888
+  languageName: node
+  linkType: hard
+
 "@deepseek-ai/schemastery@npm:^3.18.1":
   version: 3.18.1
   resolution: "@deepseek-ai/schemastery@npm:3.18.1"
@@ -643,6 +653,7 @@ __metadata:
     "@deepseek-ai/dsh-credentials": "npm:^0.1.0-rc.6"
     "@deepseek-ai/dsh-settings": "npm:^0.1.0-rc.6"
     "@deepseek-ai/dsh-tools": "npm:^0.1.0-rc.6"
+    "@deepseek-ai/dsh-typert-protocol": "npm:^0.1.0-rc.6"
     "@deepseek-ai/schemastery": "npm:^3.18.1"
     "@types/node": "npm:^25.0.2"
     oxfmt: "npm:^0.62.0"
@@ -657,6 +668,7 @@ __metadata:
     "@deepseek-ai/dsh-credentials": ^0.1.0-rc.6
     "@deepseek-ai/dsh-settings": ^0.1.0-rc.6
     "@deepseek-ai/dsh-tools": ^0.1.0-rc.6
+    "@deepseek-ai/dsh-typert-protocol": ^0.1.0-rc.6
   languageName: unknown
   linkType: soft
 
