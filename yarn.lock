@@ -645,9 +645,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dsh-plugin-pixluna@workspace:.":
+"dsh-pixluna@workspace:.":
   version: 0.0.0-use.local
-  resolution: "dsh-plugin-pixluna@workspace:."
+  resolution: "dsh-pixluna@workspace:."
   dependencies:
     "@deepseek-ai/cordis": "npm:^4.0.1"
     "@deepseek-ai/dsh-credentials": "npm:^0.1.0-rc.6"
