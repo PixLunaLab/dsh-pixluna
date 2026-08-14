@@ -4,7 +4,7 @@ import { installSettingsSection, settingsNamespace } from '@deepseek-ai/dsh-sett
 import { Config, defaultConfig } from './config'
 import { resolveCredentialConfig } from './credentials'
 import { renderImages } from './format'
-import { PixLunaConfigGateway } from './gateway'
+import { registerPixLunaConfigGateway } from './gateway'
 import { requestJson } from './http'
 import { fetchFromProvider, resolveSources } from './providers/fetch'
 import { listProviders } from './providers/registry'
@@ -115,7 +115,7 @@ export function apply(ctx: Context, config: PixLunaConfig = defaultConfig) {
     },
     onChange() {}
   })
-  new PixLunaConfigGateway(ctx, { source: () => current() })
+  registerPixLunaConfigGateway(ctx, { source: () => current() })
 
   ctx.tools.register(
     defineTool({
