@@ -347,14 +347,15 @@ interface ClientModuleWindow extends Window {
       )
     }
     const inject = ['slots', 'locale', 'connection']
+    const styleId = 'dsh-pixluna-settings'
+    if (!document.querySelector(`style[data-plugin-css="${styleId}"]`)) {
+      const style = document.createElement('style')
+      style.dataset.pluginCss = styleId
+      style.textContent = '.pixluna-settings-chevron{flex:none;color:var(--dsw-alias-label-tertiary);transition:transform .16s}.pixluna-settings-chevron-open{transform:rotate(180deg)}'
+      document.head.append(style)
+    }
     function apply(ctx: any) {
       ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'pixluna: settings locale')
-      ctx.effect(() => {
-        const style = document.createElement('style')
-        style.textContent = '.pixluna-settings-chevron{flex:none;color:var(--dsw-alias-label-tertiary);transition:transform .16s}.pixluna-settings-chevron-open{transform:rotate(180deg)}'
-        document.head.append(style)
-        return () => style.remove()
-      }, 'pixluna: settings styles')
       const t = ctx.locale.bind(NS)
       const { api } = ctx.get('connection')
       const scope = ConfigController()
